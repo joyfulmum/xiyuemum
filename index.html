@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>玺悦妈妈 | 中医产后康复与女性调理</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            bg: '#F8F6F0',
+                            card: '#FFFFFF',
+                            green: '#4A5C4D',
+                            darkgreen: '#38463A',
+                            accent: '#9E7D60',
+                            softbg: '#EFECE6',
+                            text: '#2B2B2B',
+                            muted: '#6E6D6A',
+                            border: '#E5E0D8',
+                            gold: '#C5A059'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Noto Serif SC', 'Songti SC', 'STSong', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600&display=swap');
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background-color: #F8F6F0;
+            color: #2B2B2B;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .page {
+            display: none;
+            animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .page.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .seal-badge {
+            writing-mode: vertical-rl;
+            border: 2px solid #9E7D60;
+            color: #9E7D60;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        .pb-mobile-nav {
+            padding-bottom: 5rem;
+        }
+        @media (min-width: 768px) {
+            .pb-mobile-nav {
+                padding-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-brand-accent selection:text-white relative pb-mobile-nav">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 bg-[#F8F6F0]/95 backdrop-blur-md border-b border-brand-border">
+        <div class="max-w-6xl mx-auto px-4 md:px-6 py-3.5 flex justify-between items-center">
+            <!-- Brand Logo -->
+            <a href="#" onclick="switchTab('home')" class="flex items-center space-x-2.5 group">
+                <div class="w-9 h-9 md:w-10 md:h-10 rounded-full bg-brand-green flex items-center justify-center text-white text-lg md:text-xl font-bold tracking-widest shadow-sm group-hover:scale-105 transition">
+                    玺
+                </div>
+                <div>
+                    <span class="text-xl md:text-2xl font-medium tracking-widest text-brand-green block">玺悦妈妈</span>
+                    <span class="text-[9px] md:text-[10px] tracking-wider text-brand-muted uppercase block -mt-1">Postpartum Care</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex space-x-8 text-sm tracking-widest text-brand-text">
+                <button onclick="switchTab('home')" id="nav-home" class="nav-btn text-brand-accent font-semibold transition py-1">首页</button>
+                <button onclick="switchTab('about')" id="nav-about" class="nav-btn hover:text-brand-accent transition py-1">关于我们</button>
+                <button onclick="switchTab('services')" id="nav-services" class="nav-btn hover:text-brand-accent transition py-1">康复项目</button>
+                <button onclick="switchTab('space')" id="nav-space" class="nav-btn hover:text-brand-accent transition py-1">玺悦空间</button>
+                <button onclick="switchTab('reviews')" id="nav-reviews" class="nav-btn hover:text-brand-accent transition py-1">客户评价</button>
+                <button onclick="switchTab('booking')" id="nav-booking" class="nav-btn hover:text-brand-accent transition py-1">在线预约</button>
+            </nav>
+
+            <!-- Header Action & Mobile Drawer Button -->
+            <div class="flex items-center space-x-2">
+                <button onclick="switchTab('booking')" class="bg-brand-green hover:bg-brand-darkgreen text-white text-xs md:text-sm tracking-wider px-3.5 md:px-5 py-2 md:py-2.5 rounded shadow-sm transition active:scale-95">
+                    预约调理
+                </button>
+                <button onclick="toggleMobileDrawer()" class="md:hidden p-2 text-brand-green rounded focus:outline-none" aria-label="切换菜单">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer Menu -->
+    <div id="mobile-drawer" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-opacity duration-300 opacity-0 pointer-events-none md:hidden">
+        <div id="mobile-drawer-content" class="fixed top-0 right-0 w-64 h-full bg-[#F8F6F0] shadow-2xl p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 border-l border-brand-border">
+            <div class="space-y-6">
+                <div class="flex justify-between items-center border-b border-brand-border/80 pb-4">
+                    <span class="text-lg font-medium text-brand-green tracking-wider">网站导航</span>
+                    <button onclick="toggleMobileDrawer()" class="text-brand-muted p-1 rounded hover:bg-brand-softbg">
+                        ✕
+                    </button>
+                </div>
+                <div class="flex flex-col space-y-3 text-sm tracking-widest">
+                    <button onclick="switchTab('home'); toggleMobileDrawer();" class="drawer-btn text-left py-2.5 px-3 rounded hover:bg-brand-softbg text-brand-green font-medium">❖ 首页</button>
+                    <button onclick="switchTab('about'); toggleMobileDrawer();" class="drawer-btn text-left py-2.5 px-3 rounded hover:bg-brand-softbg text-brand-text">❖ 关于我们</button>
+                    <button onclick="switchTab('services'); toggleMobileDrawer();" class="drawer-btn text-left py-2.5 px-3 rounded hover:bg-brand-softbg text-brand-text">❖ 康复项目</button>
+                    <button onclick="switchTab('space'); toggleMobileDrawer();" class="drawer-btn text-left py-2.5 px-3 rounded hover:bg-brand-softbg text-brand-text">❖ 玺悦空间</button>
+                    <button onclick="switchTab('reviews'); toggleMobileDrawer();" class="drawer-btn text-left py-2.5 px-3 rounded hover:bg-brand-softbg text-brand-text">❖ 客户评价</button>
+                    <button onclick="switchTab('booking'); toggleMobileDrawer();" class="drawer-btn text-left py-2.5 px-3 rounded hover:bg-brand-softbg text-brand-text">❖ 在线预约</button>
+                </div>
+            </div>
+            <div class="text-xs text-brand-muted text-center pt-6 border-t border-brand-border">
+                <p class="text-brand-accent font-medium mb-1">玺悦妈妈 · 温调柔养</p>
+                <p>用心守护每一位新妈妈</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-8 w-full">
+
+        <!-- PAGE 1: HOME -->
+        <section id="page-home" class="page active space-y-10 md:space-y-16">
+            
+            <!-- Hero Banner -->
+            <div class="relative rounded-2xl overflow-hidden border border-brand-border shadow-sm bg-white grid grid-cols-1 lg:grid-cols-12 items-center">
+                <div class="lg:col-span-7 p-6 sm:p-8 md:p-12 z-10 space-y-5 md:space-y-6">
+                    <div class="inline-flex items-center space-x-1.5 bg-brand-softbg/90 px-3 py-1 rounded-full text-brand-accent text-[11px] md:text-xs tracking-widest font-semibold border border-brand-border">
+                        <span>❖</span>
+                        <span>温调柔养 · 传承千年中医精粹</span>
+                    </div>
+                    <h1 class="text-2.5xl sm:text-3xl md:text-5xl text-brand-green font-normal tracking-widest leading-relaxed">
+                        温调柔养 · 重塑身心
+                    </h1>
+                    <p class="text-brand-muted text-xs sm:text-sm md:text-base leading-relaxed sm:leading-loose">
+                        遵循古法配伍与现代产后解剖学，为新时代妈妈打造温和、安全、无创的全身调理方案。
+                        在静谧茶香与草本雅韵中，开启由内而外的焕新之旅。
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                        <button onclick="switchTab('booking')" class="w-full sm:w-auto bg-brand-green hover:bg-brand-darkgreen text-white tracking-widest px-8 py-3.5 rounded shadow transition text-center text-sm font-medium">
+                            预约体验
+                        </button>
+                        <button onclick="switchTab('services')" class="w-full sm:w-auto border border-brand-green text-brand-green hover:bg-brand-green/5 tracking-widest px-8 py-3.5 rounded transition text-center text-sm">
+                            浏览调理项目
+                        </button>
+                    </div>
+                </div>
+                <div class="lg:col-span-5 h-56 sm:h-72 lg:h-full relative min-h-[260px] md:min-h-[340px]">
+                    <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80" 
+                         alt="中医温养调理环境" 
+                         onerror="this.onerror=null;this.src='https://placehold.co/800x600/EFECE6/4A5C4D?text=玺悦妈妈中医理疗'"
+                         class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-white via-transparent to-transparent"></div>
+                    <div class="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 bg-white/90 backdrop-blur-sm p-2 px-3 rounded text-[10px] sm:text-[11px] text-brand-accent font-semibold border border-brand-border flex items-center space-x-1.5 shadow-sm">
+                        <span>🌿</span>
+                        <span>道地天然草本熏蒸</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Core Features Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 md:gap-8">
+                <div class="bg-white rounded-xl border border-brand-border overflow-hidden hover:shadow-md transition group">
+                    <div class="h-40 sm:h-44 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=600&q=80" 
+                             alt="道地草本熏蒸" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/600x400/EFECE6/4A5C4D?text=草本熏蒸'"
+                             class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-black/10"></div>
+                        <span class="absolute top-3 left-3 bg-brand-green/90 text-white text-[10px] tracking-widest px-2.5 py-1 rounded">古法熏蒸</span>
+                    </div>
+                    <div class="p-5 md:p-6 text-center space-y-2">
+                        <h3 class="text-base md:text-lg font-medium text-brand-green tracking-wider">道地草本熏蒸</h3>
+                        <p class="text-xs text-brand-muted leading-relaxed">严选九道地道中药材，通过水蒸气温热散发，温通经络、驱散产后寒湿。</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-brand-border overflow-hidden hover:shadow-md transition group">
+                    <div class="h-40 sm:h-44 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=600&q=80" 
+                             alt="柔性骨盆正骨" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/600x400/EFECE6/4A5C4D?text=柔性正骨'"
+                             class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-black/10"></div>
+                        <span class="absolute top-3 left-3 bg-brand-green/90 text-white text-[10px] tracking-widest px-2.5 py-1 rounded">经穴手法</span>
+                    </div>
+                    <div class="p-5 md:p-6 text-center space-y-2">
+                        <h3 class="text-base md:text-lg font-medium text-brand-green tracking-wider">柔性骨盆正骨</h3>
+                        <p class="text-xs text-brand-muted leading-relaxed">结合中医推拿与人体力学，轻柔手法舒缓耻骨疼痛，沉降闭合修复骨盆。</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-brand-border overflow-hidden hover:shadow-md transition group sm:col-span-2 md:col-span-1">
+                    <div class="h-40 sm:h-44 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80" 
+                             alt="一人一方体质调理" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/600x400/EFECE6/4A5C4D?text=一人一方'"
+                             class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-black/10"></div>
+                        <span class="absolute top-3 left-3 bg-brand-green/90 text-white text-[10px] tracking-widest px-2.5 py-1 rounded">辨证施调</span>
+                    </div>
+                    <div class="p-5 md:p-6 text-center space-y-2">
+                        <h3 class="text-base md:text-lg font-medium text-brand-green tracking-wider">一人一方体质调理</h3>
+                        <p class="text-xs text-brand-muted leading-relaxed">资深中医师把脉问诊，针对气血亏虚、汗多畏寒，量身订制阶段养护方案。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Google Review Banner -->
+            <div class="bg-brand-softbg border border-brand-border rounded-xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-5 relative overflow-hidden text-center md:text-left">
+                <div class="space-y-2 z-10">
+                    <div class="flex items-center justify-center md:justify-start space-x-1 text-amber-500 text-base md:text-lg">
+                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                        <span class="text-brand-text font-bold text-sm md:text-base ml-2">4.9 / 5.0</span>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-medium text-brand-green tracking-wider">来自 120+ 位新妈妈的真实好评</h3>
+                    <p class="text-xs text-brand-muted">您的信任是我们最大的动力，欢迎在 Google 上分享您的温养体验</p>
+                </div>
+                <a href="https://maps.google.com" target="_blank" class="w-full md:w-auto justify-center bg-white hover:bg-gray-50 border border-brand-border px-5 py-3 rounded-full text-xs sm:text-sm font-medium text-brand-text shadow-sm flex items-center space-x-2 transition shrink-0 z-10 active:scale-98">
+                    <span>🌐</span>
+                    <span>前往 Google 留评 / 查看评价</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- PAGE 2: ABOUT -->
+        <section id="page-about" class="page space-y-10 md:space-y-12">
+            <div class="max-w-3xl mx-auto space-y-4 text-center">
+                <span class="text-[11px] md:text-xs uppercase tracking-[0.3em] text-brand-accent font-semibold">About Xi Yue Ma Ma</span>
+                <h2 class="text-2.5xl md:text-3xl font-normal text-brand-green tracking-widest">品牌理念与传承</h2>
+                <div class="w-12 h-0.5 bg-brand-accent mx-auto"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center bg-white p-5 md:p-10 rounded-xl border border-brand-border">
+                <div class="md:col-span-5 rounded-lg overflow-hidden border border-brand-border h-64 md:h-80">
+                    <img src="https://images.unsplash.com/photo-1512290900673-04b36017e250?auto=format&fit=crop&w=800&q=80" 
+                         alt="禅意雅致空间" 
+                         onerror="this.onerror=null;this.src='https://placehold.co/800x600/EFECE6/4A5C4D?text=禅意空间'"
+                         class="w-full h-full object-cover">
+                </div>
+                <div class="md:col-span-7 space-y-4 md:space-y-5 leading-relaxed md:leading-loose text-brand-text text-justify text-xs sm:text-sm md:text-base">
+                    <p>
+                        <strong class="text-brand-green text-base md:text-lg">玺悦妈妈（Xi Yue Mama）</strong> 专注于女性产后全周期修复与健康调理。我们秉持“温调柔养”的中医哲学，摒弃剧烈与侵入式的干预手法，强调以顺应身体自然韵律的方式，协助母体重拾平衡与新生。
+                    </p>
+                    <p>
+                        产后是女性体质重塑的关键时期。中医认为产后多“津血亏虚、百脉空虚”，若冒然强效进补或剧烈运动，往往适得其反。玺悦妈妈理疗团队均兼具中医针灸推拿背景与现代产后康复认证，致力于提供专业、安全、有温度的陪伴。
+                    </p>
+                    <div class="grid grid-cols-2 gap-3 pt-4 border-t border-brand-border text-center">
+                        <div class="p-3 bg-brand-softbg/60 rounded border border-brand-border/60">
+                            <span class="block text-brand-accent font-semibold text-xs md:text-sm">修身 · 骨骼与体态</span>
+                            <span class="text-[10px] md:text-[11px] text-brand-muted">骨盆复位 · 腹直肌温和紧致</span>
+                        </div>
+                        <div class="p-3 bg-brand-softbg/60 rounded border border-brand-border/60">
+                            <span class="block text-brand-accent font-semibold text-xs md:text-sm">养息 · 气血与心境</span>
+                            <span class="text-[10px] md:text-[11px] text-brand-muted">草本熏蒸 · 腹部温阳散寒</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 3: SERVICES -->
+        <section id="page-services" class="page space-y-8 md:space-y-10">
+            <div class="text-center space-y-2 md:space-y-3">
+                <h2 class="text-2.5xl md:text-3xl font-normal text-brand-green tracking-widest">核心调理项目</h2>
+                <p class="text-xs text-brand-muted tracking-wider">根据产后不同阶段定制科学调理方案</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                <!-- Project 1 -->
+                <div class="bg-white rounded-xl border border-brand-border overflow-hidden flex flex-col justify-between hover:shadow-md transition">
+                    <div class="h-44 sm:h-48 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=800&q=80" 
+                             alt="骨盆修护" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/800x400/EFECE6/4A5C4D?text=骨盆修护'"
+                             class="w-full h-full object-cover">
+                        <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-brand-accent text-[11px] font-semibold px-2.5 py-1 rounded border border-brand-border">60 分钟</span>
+                    </div>
+                    <div class="p-5 md:p-6 space-y-3 md:space-y-4">
+                        <div class="flex justify-between items-start">
+                            <span class="text-[11px] text-brand-accent font-semibold tracking-widest">PROJECT 01</span>
+                            <span class="text-[11px] bg-brand-softbg px-2.5 py-1 rounded text-brand-muted">适用：耻骨痛 / 假胯宽</span>
+                        </div>
+                        <h3 class="text-lg md:text-xl font-medium text-brand-green">中医骨盆与脊椎柔性修护</h3>
+                        <p class="text-xs text-brand-muted leading-relaxed">
+                            针对产后耻骨联合分离、腰骶部酸痛及体态倾斜。通过柔性正骨手法舒缓肌肉张力，配合草本热敷沉降骨盆。
+                        </p>
+                        <div class="flex justify-between items-center pt-3 md:pt-4 border-t border-brand-border">
+                            <span class="text-xs text-brand-accent font-medium">温和正骨 · 闭合紧致</span>
+                            <button onclick="switchTab('booking')" class="text-xs text-brand-green font-semibold hover:underline">立即预约 →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="bg-white rounded-xl border border-brand-border overflow-hidden flex flex-col justify-between hover:shadow-md transition">
+                    <div class="h-44 sm:h-48 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=800&q=80" 
+                             alt="草本理疗" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/800x400/EFECE6/4A5C4D?text=草本理疗'"
+                             class="w-full h-full object-cover">
+                        <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-brand-accent text-[11px] font-semibold px-2.5 py-1 rounded border border-brand-border">90 分钟</span>
+                    </div>
+                    <div class="p-5 md:p-6 space-y-3 md:space-y-4">
+                        <div class="flex justify-between items-start">
+                            <span class="text-[11px] text-brand-accent font-semibold tracking-widest">PROJECT 02</span>
+                            <span class="text-[11px] bg-brand-softbg px-2.5 py-1 rounded text-brand-muted">适用：自汗怕冷 / 睡眠差</span>
+                        </div>
+                        <h3 class="text-lg md:text-xl font-medium text-brand-green">气血温养与月子草本理疗</h3>
+                        <p class="text-xs text-brand-muted leading-relaxed">
+                            针对产后自汗盗汗、怕冷畏寒、体虚乏力。使用定制道地药材熏蒸，搭配全背经络推拿，促进全身微循环。
+                        </p>
+                        <div class="flex justify-between items-center pt-3 md:pt-4 border-t border-brand-border">
+                            <span class="text-xs text-brand-accent font-medium">草本熏蒸 · 散寒暖宫</span>
+                            <button onclick="switchTab('booking')" class="text-xs text-brand-green font-semibold hover:underline">立即预约 →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="bg-white rounded-xl border border-brand-border overflow-hidden flex flex-col justify-between hover:shadow-md transition">
+                    <div class="h-44 sm:h-48 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80" 
+                             alt="核心重建" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/800x400/EFECE6/4A5C4D?text=核心重建'"
+                             class="w-full h-full object-cover">
+                        <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-brand-accent text-[11px] font-semibold px-2.5 py-1 rounded border border-brand-border">60 分钟</span>
+                    </div>
+                    <div class="p-5 md:p-6 space-y-3 md:space-y-4">
+                        <div class="flex justify-between items-start">
+                            <span class="text-[11px] text-brand-accent font-semibold tracking-widest">PROJECT 03</span>
+                            <span class="text-[11px] bg-brand-softbg px-2.5 py-1 rounded text-brand-muted">适用：腹部松弛 / 凸肚</span>
+                        </div>
+                        <h3 class="text-lg md:text-xl font-medium text-brand-green">腹直肌分离与核心重建</h3>
+                        <p class="text-xs text-brand-muted leading-relaxed">
+                            利用中医推拿手法结合呼吸指引，促进腹部筋膜自我修复，温和改善产后腹部松弛及内脏下垂。
+                        </p>
+                        <div class="flex justify-between items-center pt-3 md:pt-4 border-t border-brand-border">
+                            <span class="text-xs text-brand-accent font-medium">筋膜修复 · 收紧腹围</span>
+                            <button onclick="switchTab('booking')" class="text-xs text-brand-green font-semibold hover:underline">立即预约 →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="bg-white rounded-xl border border-brand-border overflow-hidden flex flex-col justify-between hover:shadow-md transition">
+                    <div class="h-44 sm:h-48 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=800&q=80" 
+                             alt="胸部疏通" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/800x400/EFECE6/4A5C4D?text=胸部疏通'"
+                             class="w-full h-full object-cover">
+                        <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-brand-accent text-[11px] font-semibold px-2.5 py-1 rounded border border-brand-border">75 分钟</span>
+                    </div>
+                    <div class="p-5 md:p-6 space-y-3 md:space-y-4">
+                        <div class="flex justify-between items-start">
+                            <span class="text-[11px] text-brand-accent font-semibold tracking-widest">PROJECT 04</span>
+                            <span class="text-[11px] bg-brand-softbg px-2.5 py-1 rounded text-brand-muted">适用：堵奶 / 涨奶 / 结块</span>
+                        </div>
+                        <h3 class="text-lg md:text-xl font-medium text-brand-green">通乳疏乳与胸部经络护理</h3>
+                        <p class="text-xs text-brand-muted leading-relaxed">
+                            无痛无创手法疏通乳腺管，改善产后涨奶、结块及少奶问题，兼顾产后胸部紧致与健康。
+                        </p>
+                        <div class="flex justify-between items-center pt-3 md:pt-4 border-t border-brand-border">
+                            <span class="text-xs text-brand-accent font-medium">无痛无创 · 舒适疏通</span>
+                            <button onclick="switchTab('booking')" class="text-xs text-brand-green font-semibold hover:underline">立即预约 →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: SPACE GALLERY -->
+        <section id="page-space" class="page space-y-8 md:space-y-10">
+            <div class="text-center space-y-2 md:space-y-3">
+                <span class="text-[11px] uppercase tracking-[0.3em] text-brand-accent font-semibold">Xi Yue Gallery</span>
+                <h2 class="text-2.5xl md:text-3xl font-normal text-brand-green tracking-widest">玺悦静谧空间</h2>
+                <p class="text-xs text-brand-muted">素雅国风 · 一房一景 · 私密雅致</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 md:gap-6">
+                <div class="bg-white rounded-xl overflow-hidden border border-brand-border space-y-3 p-3">
+                    <div class="h-48 sm:h-56 md:h-60 rounded overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1512290900673-04b36017e250?auto=format&fit=crop&w=800&q=80" 
+                             alt="私密理疗榻" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/800x600/EFECE6/4A5C4D?text=私密理疗榻'"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-1.5 text-center">
+                        <h4 class="text-sm font-medium text-brand-green">私密单人理疗榻</h4>
+                        <p class="text-[11px] text-brand-muted mt-1">独立温控与隔音，沉浸式艾草香薰与禅音疗愈</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl overflow-hidden border border-brand-border space-y-3 p-3">
+                    <div class="h-48 sm:h-56 md:h-60 rounded overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=800&q=80" 
+                             alt="本草药房" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/800x600/EFECE6/4A5C4D?text=道地本草'"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-1.5 text-center">
+                        <h4 class="text-sm font-medium text-brand-green">道地名贵药材柜</h4>
+                        <p class="text-[11px] text-brand-muted mt-1">严选道地药材，一人一方现场复核与手工包配</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl overflow-hidden border border-brand-border space-y-3 p-3 sm:col-span-2 md:col-span-1">
+                    <div class="h-48 sm:h-56 md:h-60 rounded overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80" 
+                             alt="品茗论道区" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/800x600/EFECE6/4A5C4D?text=茶歇歇息区'"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-1.5 text-center">
+                        <h4 class="text-sm font-medium text-brand-green">新中式茶饮歇息区</h4>
+                        <p class="text-[11px] text-brand-muted mt-1">理疗后享用专业配伍月子养生茶饮与手工茶点</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 5: REVIEWS -->
+        <section id="page-reviews" class="page space-y-8 md:space-y-10">
+            <div class="text-center space-y-2 md:space-y-3">
+                <h2 class="text-2.5xl md:text-3xl font-normal text-brand-green tracking-widest">妈妈们的真实反馈</h2>
+                <p class="text-xs text-brand-muted">每一份评价都是对“玺悦妈妈”品质的见证</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+                <div class="bg-white p-5 md:p-6 rounded-lg border border-brand-border space-y-3 md:space-y-4">
+                    <div class="text-amber-500 text-sm md:text-base">★★★★★</div>
+                    <p class="text-xs text-brand-text leading-relaxed">“产后腰痛得厉害，朋友推荐来的。做完两次骨盆修复就轻松很多，房间很安静还有淡淡的艾草香，特别放松。”</p>
+                    <div class="text-[11px] text-brand-muted border-t border-brand-border/60 pt-3">
+                        — 李女士（产后 2 个月）
+                    </div>
+                </div>
+                <div class="bg-white p-5 md:p-6 rounded-lg border border-brand-border space-y-3 md:space-y-4">
+                    <div class="text-amber-500 text-sm md:text-base">★★★★★</div>
+                    <p class="text-xs text-brand-text leading-relaxed">“月子做完后一直出虚汗、怕冷。理疗师手法很温和，草本熏蒸后全身暖洋洋的，当晚睡眠质量提升特别明显！”</p>
+                    <div class="text-[11px] text-brand-muted border-t border-brand-border/60 pt-3">
+                        — 张妈妈（产后 45 天）
+                    </div>
+                </div>
+                <div class="bg-white p-5 md:p-6 rounded-lg border border-brand-border space-y-3 md:space-y-4">
+                    <div class="text-amber-500 text-sm md:text-base">★★★★★</div>
+                    <p class="text-xs text-brand-text leading-relaxed">“环境非常素雅国风，没有任何推销感。预约制保障了隐私，理疗师对产后生理恢复非常专业，十分推荐！”</p>
+                    <div class="text-[11px] text-brand-muted border-t border-brand-border/60 pt-3">
+                        — 陈女士（产后 3 个月）
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center pt-4 md:pt-6">
+                <a href="https://maps.google.com" target="_blank" class="inline-flex items-center justify-center space-x-2 bg-brand-green hover:bg-brand-darkgreen text-white px-6 md:px-8 py-3.5 rounded text-xs md:text-sm transition shadow-sm w-full sm:w-auto">
+                    <span>⭐ 在 Google Review 上留评支持我们</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- PAGE 6: BOOKING -->
+        <section id="page-booking" class="page max-w-xl mx-auto">
+            <div class="bg-white p-6 sm:p-8 md:p-10 rounded-xl border border-brand-border shadow-sm space-y-5 md:space-y-6">
+                <div class="text-center space-y-2">
+                    <h2 class="text-xl sm:text-2xl font-normal text-brand-green tracking-widest">预约调理咨询</h2>
+                    <p class="text-xs text-brand-muted">填写基本信息，我们的健康顾问将在 2 小时内与您联系</p>
+                </div>
+
+                <form onsubmit="handleBooking(event)" class="space-y-4 md:space-y-5">
+                    <div>
+                        <label class="block text-xs font-medium text-brand-text mb-1">您的姓名 *</label>
+                        <input type="text" required placeholder="如：王女士" class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded border border-brand-border bg-brand-bg/50 focus:bg-white focus:outline-none focus:border-brand-green transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-brand-text mb-1">联系电话 *</label>
+                        <input type="tel" required placeholder="请输入手机号码" class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded border border-brand-border bg-brand-bg/50 focus:bg-white focus:outline-none focus:border-brand-green transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-brand-text mb-1">意向理疗项目</label>
+                        <select class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded border border-brand-border bg-brand-bg/50 focus:bg-white focus:outline-none focus:border-brand-green transition">
+                            <option>中医骨盆与脊椎柔性修护</option>
+                            <option>气血温养与月子草本理疗</option>
+                            <option>腹直肌分离与核心重建</option>
+                            <option>通乳疏乳与胸部经络护理</option>
+                            <option>不确定，需要顾问辩证评估</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-brand-text mb-1">期望预约日期</label>
+                        <input type="date" class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded border border-brand-border bg-brand-bg/50 focus:bg-white focus:outline-none focus:border-brand-green transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-brand-text mb-1">身体状况与特殊备注</label>
+                        <textarea rows="3" placeholder="如：顺产/剖腹产天数、腰痛位置或喂奶情况..." class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded border border-brand-border bg-brand-bg/50 focus:bg-white focus:outline-none focus:border-brand-green transition"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-brand-green hover:bg-brand-darkgreen text-white py-3.5 rounded text-xs sm:text-sm tracking-widest transition font-medium active:scale-98">
+                        确认提交预约
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#F8F6F0]/95 backdrop-blur-md border-t border-brand-border px-1 py-1.5 flex justify-around items-center text-[10px] shadow-lg">
+        <button onclick="switchTab('home')" id="mob-home" class="mob-btn flex flex-col items-center py-1 px-2 text-brand-accent font-semibold">
+            <span class="text-base leading-none mb-0.5">🏠</span>
+            <span>首页</span>
+        </button>
+        <button onclick="switchTab('about')" id="mob-about" class="mob-btn flex flex-col items-center py-1 px-2 text-brand-muted">
+            <span class="text-base leading-none mb-0.5">📜</span>
+            <span>关于</span>
+        </button>
+        <button onclick="switchTab('services')" id="mob-services" class="mob-btn flex flex-col items-center py-1 px-2 text-brand-muted">
+            <span class="text-base leading-none mb-0.5">🌿</span>
+            <span>项目</span>
+        </button>
+        <button onclick="switchTab('space')" id="mob-space" class="mob-btn flex flex-col items-center py-1 px-2 text-brand-muted">
+            <span class="text-base leading-none mb-0.5">🖼️</span>
+            <span>空间</span>
+        </button>
+        <button onclick="switchTab('reviews')" id="mob-reviews" class="mob-btn flex flex-col items-center py-1 px-2 text-brand-muted">
+            <span class="text-base leading-none mb-0.5">⭐</span>
+            <span>评价</span>
+        </button>
+        <button onclick="switchTab('booking')" id="mob-booking" class="mob-btn flex flex-col items-center py-1 px-2 text-brand-muted">
+            <span class="text-base leading-none mb-0.5">📅</span>
+            <span>预约</span>
+        </button>
+    </nav>
+
+    <!-- Modal Dialog -->
+    <div id="modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white max-w-sm w-full p-6 rounded-xl border border-brand-border text-center space-y-4 shadow-xl">
+            <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl">
+                ✓
+            </div>
+            <h3 class="text-base md:text-lg font-medium text-brand-green">预约申请已收到</h3>
+            <p class="text-xs text-brand-muted leading-relaxed">
+                感谢您对【玺悦妈妈】的信任！我们的专职顾问将尽快为您安排专属理疗师并与您确认时间。
+            </p>
+            <button onclick="closeModal()" class="w-full bg-brand-green text-white text-xs py-2.5 rounded hover:bg-brand-darkgreen transition">
+                好的，我知道了
+            </button>
+        </div>
+    </div>
+
+    <!-- Desktop Footer -->
+    <footer class="bg-white border-t border-brand-border py-6 md:py-8 text-center text-xs text-brand-muted space-y-2 mt-8 md:mt-12">
+        <p class="font-medium text-brand-text">玺悦妈妈 · 中医产后康复中心</p>
+        <p>服务电话：123-4567-8900 | 营业时间：09:30 - 18:30 (需提前预约)</p>
+        <p class="text-[10px] text-gray-400">© 2026 玺悦妈妈 Xi Yue Mama. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        function switchTab(tabName) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-brand-accent', 'font-semibold');
+            });
+
+            document.querySelectorAll('.mob-btn').forEach(btn => {
+                btn.classList.remove('text-brand-accent', 'font-semibold');
+                btn.classList.add('text-brand-muted');
+            });
+
+            const targetPage = document.getElementById('page-' + tabName);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            const activeNav = document.getElementById('nav-' + tabName);
+            if (activeNav) {
+                activeNav.classList.add('text-brand-accent', 'font-semibold');
+            }
+
+            const activeMobNav = document.getElementById('mob-' + tabName);
+            if (activeMobNav) {
+                activeMobNav.classList.remove('text-brand-muted');
+                activeMobNav.classList.add('text-brand-accent', 'font-semibold');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileDrawer() {
+            const drawer = document.getElementById('mobile-drawer');
+            const drawerContent = document.getElementById('mobile-drawer-content');
+            
+            if (drawer.classList.contains('opacity-0')) {
+                drawer.classList.remove('opacity-0', 'pointer-events-none');
+                drawer.classList.add('opacity-100');
+                drawerContent.classList.remove('translate-x-full');
+            } else {
+                drawer.classList.remove('opacity-100');
+                drawer.classList.add('opacity-0', 'pointer-events-none');
+                drawerContent.classList.add('translate-x-full');
+            }
+        }
+
+        function handleBooking(e) {
+            e.preventDefault();
+            document.getElementById('modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+            switchTab('home');
+        }
+    </script>
+</body>
+</html>
